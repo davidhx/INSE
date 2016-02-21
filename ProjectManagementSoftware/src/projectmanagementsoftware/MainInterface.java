@@ -9,7 +9,7 @@ package projectmanagementsoftware;
 
 /**
  *
- * @author Ellis
+ * @author up726086
  */
 public class MainInterface extends javax.swing.JFrame {
 
