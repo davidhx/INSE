@@ -41,6 +41,21 @@ public class TaskNode {
         ganttPosition = 0;
     }
 
+    private TaskNode(String newTaskID, String newTaskTitle,
+            ArrayList<String> newTaskPredecessors, int newTaskDuration,
+            int[] newWbtCoords, int[] newPertCoords, int newGanttPosition) {
+        taskID = newTaskID;
+        taskTitle = newTaskTitle;
+        taskPredecessors = newTaskPredecessors;
+//        startDate = "00/00/0000";
+//        cal = cal.getInstance();
+//        cal.set();
+        taskDuration = newTaskDuration;
+        wbtCoOrds = newWbtCoords;
+        pertCoOrds = newPertCoords;
+        ganttPosition = newGanttPosition;
+    }
+
     //accessor methods
     public String getTaskId() {
         return taskID;
@@ -65,14 +80,14 @@ public class TaskNode {
 //    }
     //
     public void setTaskId(String newTaskID) {
-        taskID=newTaskID;
+        taskID = newTaskID;
     }
 
     public void setTaskTitle(String newTaskTitle) {
-        taskTitle=newTaskTitle;
+        taskTitle = newTaskTitle;
     }
 
-    public void getTaskPredecessors( ArrayList<String> newTaskPredecessors) {
-        taskPredecessors= newTaskPredecessors;
+    public void getTaskPredecessors(ArrayList<String> newTaskPredecessors) {
+        taskPredecessors = newTaskPredecessors;
     }
 }
