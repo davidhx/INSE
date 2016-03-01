@@ -6,9 +6,9 @@
 package projectmanagementsoftware;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+//import java.util.Calendar;
+//import java.text.SimpleDateFormat;
+//import java.util.Date;
 
 /**
  *
@@ -63,5 +63,16 @@ public class TaskNode {
 //        c.setTime(new Date());
 //        c.add(Calendar.DATE, 5);
 //    }
+    //
+    public void setTaskId(String newTaskID) {
+        taskID=newTaskID;
+    }
 
+    public void setTaskTitle(String newTaskTitle) {
+        taskTitle=newTaskTitle;
+    }
+
+    public void getTaskPredecessors( ArrayList<String> newTaskPredecessors) {
+        taskPredecessors= newTaskPredecessors;
+    }
 }
