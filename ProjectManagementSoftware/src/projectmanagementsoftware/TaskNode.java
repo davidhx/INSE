@@ -87,7 +87,7 @@ public class TaskNode {
         taskTitle = newTaskTitle;
     }
 
-    public void getTaskPredecessors(ArrayList<String> newTaskPredecessors) {
+    public void setTaskPredecessors(ArrayList<String> newTaskPredecessors) {
         taskPredecessors = newTaskPredecessors;
     }
 }
