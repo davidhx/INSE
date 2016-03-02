@@ -223,6 +223,11 @@ public class MainInterface extends javax.swing.JFrame {
 
         OpenProjectFileItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
         OpenProjectFileItem.setText("Open Project");
+        OpenProjectFileItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OpenProjectFileItemActionPerformed(evt);
+            }
+        });
         FileMenu.add(OpenProjectFileItem);
 
         SaveProjectFileItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
@@ -285,6 +290,10 @@ public class MainInterface extends javax.swing.JFrame {
             JPanel3State = true;
         }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void OpenProjectFileItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenProjectFileItemActionPerformed
+        loadProject("testProject.pmcs");
+    }//GEN-LAST:event_OpenProjectFileItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -370,7 +379,7 @@ public class MainInterface extends javax.swing.JFrame {
         String projectString = "";
         try {
             byte[] encoded = Files.readAllBytes(Paths.get(fileName));
-            projectString = new String(encoded, StandardCharsets.UTF_16);
+            projectString = new String(encoded, StandardCharsets.UTF_8);
             return projectString;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
@@ -384,7 +393,10 @@ public class MainInterface extends javax.swing.JFrame {
     private ArrayList<TaskNode> createNodes(String projectString) {
         ArrayList<TaskNode> newProject= new ArrayList<>();
         
+        //loop to pull out each variable
         
+        
+        //returns the project nodes
         return newProject;
     }
 
