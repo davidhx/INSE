@@ -394,7 +394,18 @@ public class MainInterface extends javax.swing.JFrame {
         ArrayList<TaskNode> newProject= new ArrayList<>();
         
         //loop to pull out each variable
+        String[] nodeStrings = projectString.split("\\)");
+        System.out.println(projectString);  //debugging
+        for (String nodeString : nodeStrings) {
+            System.out.println(nodeString); //debugging
+            int bracketLocation=nodeString.indexOf("(");
+            nodeString=nodeString.substring(bracketLocation+1); //removes up to the first bracket
+            TaskNode nodeI= new TaskNode(nodeString);
+            newProject.add(nodeI);
+        }
         
+        System.out.println(newProject.get(1).getEndDate());  // debugging
+        System.out.println(newProject.get(1).getStartDate());  // debugging
         
         //returns the project nodes
         return newProject;
