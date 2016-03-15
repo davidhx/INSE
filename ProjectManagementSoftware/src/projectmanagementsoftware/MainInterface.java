@@ -6,12 +6,14 @@ package projectmanagementsoftware;
  * @author up726086
  */
 import java.nio.file.*;
+import javax.swing.*;
 import javax.swing.JOptionPane;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class MainInterface extends javax.swing.JFrame {
 
+    final JFileChooser fc = new JFileChooser();
     ArrayList<TaskNode> currentProject;
     boolean JPanel3State = true;
 
@@ -292,7 +294,16 @@ public class MainInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void OpenProjectFileItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenProjectFileItemActionPerformed
-        loadProject("testProject.pmcs");
+        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        int returnVal = fc.showOpenDialog(this);
+        if (returnVal == 0) {
+            loadProject(fc.getSelectedFile().getAbsolutePath());
+        } else if (returnVal == -1) {
+            JOptionPane.showMessageDialog(this,
+                    "The file cannot be accessed, please ensure the file exists",
+                    "Project loading issue",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_OpenProjectFileItemActionPerformed
 
     /**
@@ -362,12 +373,7 @@ public class MainInterface extends javax.swing.JFrame {
     private javax.swing.JTextField txtTaskTitle;
     // End of variables declaration//GEN-END:variables
 
-    
-    
-    
     //loading the project
-    
-    
     private void loadProject(String fileName) {
         String projectString = loadFile(fileName);
         if (!projectString.equals("")) {
@@ -391,22 +397,16 @@ public class MainInterface extends javax.swing.JFrame {
     }
 
     private ArrayList<TaskNode> createNodes(String projectString) {
-        ArrayList<TaskNode> newProject= new ArrayList<>();
-        
+        ArrayList<TaskNode> newProject = new ArrayList<>();
+
         //loop to pull out each variable
         String[] nodeStrings = projectString.split("\\)");
-        System.out.println(projectString);  //debugging
         for (String nodeString : nodeStrings) {
-            System.out.println(nodeString); //debugging
-            int bracketLocation=nodeString.indexOf("(");
-            nodeString=nodeString.substring(bracketLocation+1); //removes up to the first bracket
-            TaskNode nodeI= new TaskNode(nodeString);
+            int bracketLocation = nodeString.indexOf("(");
+            nodeString = nodeString.substring(bracketLocation + 1); //removes up to the first bracket
+            TaskNode nodeI = new TaskNode(nodeString);
             newProject.add(nodeI);
         }
-        
-        System.out.println(newProject.get(1).getEndDate());  // debugging
-        System.out.println(newProject.get(1).getStartDate());  // debugging
-        
         //returns the project nodes
         return newProject;
     }
