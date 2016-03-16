@@ -1,4 +1,0 @@
-format of taskId, taskTitle, startDate, duration, listOfPredecessors, xy coords for WBT, xy for pert, list position for gantt
-(1,Random Task,01-01-2001,1,{},[0,1],[0,2],0) 
-(1.1,Random Subtask,01-01-2001,1,{2},[0,0],[0,0],0) 
-(2,Random Task2,01-01-2001,1,{},[0,0],[0,0],0)
