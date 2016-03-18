@@ -5,11 +5,13 @@ package projectmanagementsoftware;
  *
  * @author up726086
  */
+import java.awt.BorderLayout;
 import java.nio.file.*;
 import javax.swing.*;
 import javax.swing.JOptionPane;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import org.jfree.chart.ChartPanel;
 
 public class MainInterface extends javax.swing.JFrame {
 
@@ -22,6 +24,7 @@ public class MainInterface extends javax.swing.JFrame {
      */
     public MainInterface() {
         initComponents();
+        ganttChart();
     }
 
     /**
@@ -409,6 +412,16 @@ public class MainInterface extends javax.swing.JFrame {
         }
         //returns the project nodes
         return newProject;
+    }
+    
+    private void ganttChart() {
+        
+        ChartPanel chartPanel = GanttChart.Test("Gantt Chart Test 1");
+        
+        jPanel2.setLayout(new java.awt.BorderLayout());
+        jPanel2.add(chartPanel,BorderLayout.CENTER);
+        jPanel2.validate();
+        
     }
 
 }
