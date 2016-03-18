@@ -43,4 +43,11 @@ public class TestClass {
     //
     // @Test
     // public void hello() {}
+    
+    @Test
+    public void numTest(){
+        int x = 2;
+        int y = 5;
+        assertEquals(7, x+y);
+    }
 }
