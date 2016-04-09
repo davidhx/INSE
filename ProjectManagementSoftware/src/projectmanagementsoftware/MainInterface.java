@@ -11,12 +11,12 @@ import javax.swing.*;
 import javax.swing.JOptionPane;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import org.jfree.chart.ChartPanel;
+//import org.jfree.chart.ChartPanel;
 
 public class MainInterface extends javax.swing.JFrame {
 
     final JFileChooser fc = new JFileChooser();
-    ArrayList<TaskNode> currentProject;
+    private ArrayList<TaskNode> currentProject = new ArrayList<>();
     boolean JPanel3State = true;
 
     /**
@@ -161,14 +161,14 @@ public class MainInterface extends javax.swing.JFrame {
         pnlSpecificToolsLayout.setHorizontalGroup(
             pnlSpecificToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlSpecificToolsLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(pnlSpecificToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSpecificToolsLayout.createSequentialGroup()
                         .addGroup(pnlSpecificToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSpecificToolsLayout.createSequentialGroup()
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSpecificToolsLayout.createSequentialGroup()
-                                .addContainerGap()
                                 .addComponent(jLabel5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtDuration, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -177,7 +177,7 @@ public class MainInterface extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSpecificToolsLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -237,6 +237,11 @@ public class MainInterface extends javax.swing.JFrame {
 
         SaveProjectFileItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         SaveProjectFileItem.setText("Save Project");
+        SaveProjectFileItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SaveProjectFileItemActionPerformed(evt);
+            }
+        });
         FileMenu.add(SaveProjectFileItem);
 
         jMenuBar1.add(FileMenu);
@@ -309,6 +314,34 @@ public class MainInterface extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_OpenProjectFileItemActionPerformed
 
+    private void SaveProjectFileItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveProjectFileItemActionPerformed
+        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        int returnVal = fc.showSaveDialog(this);
+        Boolean fileError = false;
+        if (returnVal == 0) {
+            String filePath = fc.getSelectedFile().getAbsolutePath();
+            try {
+                Files.deleteIfExists(Paths.get(filePath));
+            } catch (Exception e) {
+                fileError = true;
+            }
+            if (!fileError) {
+                saveProject(fc.getSelectedFile().getAbsolutePath());
+            }
+
+        } else if (returnVal == -1) {
+            fileError = true;
+        }
+
+        if (fileError) {
+            JOptionPane.showMessageDialog(this,
+                    "The file cannot be accessed, please ensure the file exists",
+                    "Project loading issue",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_SaveProjectFileItemActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -380,7 +413,7 @@ public class MainInterface extends javax.swing.JFrame {
     private void loadProject(String fileName) {
         String projectString = loadFile(fileName);
         if (!projectString.equals("")) {
-            createNodes(projectString);
+            currentProject = createNodes(projectString);
         }
     }
 
@@ -399,6 +432,26 @@ public class MainInterface extends javax.swing.JFrame {
         return "";
     }
 
+    private void saveProject(String outputPath) {
+        String outputString = "";
+        for (int i = 0; i < currentProject.size(); i++) {
+            outputString += currentProject.get(i).toOutputString() + "\n";
+        }
+        if (!"".equals(outputString)) {
+            outputString = outputString.substring(0,outputString.length()-1);
+            byte[] outputBytes = outputString.getBytes(StandardCharsets.UTF_8);
+            Path file = Paths.get(outputPath);
+            try {
+                Files.write(file, outputBytes, StandardOpenOption.CREATE_NEW);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this,
+                        "The destination is inaccessable",
+                        "Project saving issue",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
     private ArrayList<TaskNode> createNodes(String projectString) {
         ArrayList<TaskNode> newProject = new ArrayList<>();
 
@@ -413,15 +466,13 @@ public class MainInterface extends javax.swing.JFrame {
         //returns the project nodes
         return newProject;
     }
-    
+
     private void ganttChart() {
-        
+
         ChartPanel chartPanel = GanttChart.Test("Gantt Chart Test 1");
-        
         jPanel2.setLayout(new java.awt.BorderLayout());
-        jPanel2.add(chartPanel,BorderLayout.CENTER);
+        jPanel2.add(chartPanel, BorderLayout.CENTER);
         jPanel2.validate();
-        
     }
 
 }
