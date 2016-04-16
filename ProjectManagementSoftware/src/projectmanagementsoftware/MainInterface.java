@@ -19,7 +19,6 @@ public class MainInterface extends javax.swing.JFrame {
     private ArrayList<TaskNode> currentProject = new ArrayList<>();
     boolean JPanel3State = true;
     String currentMode = "Gantt";
-    boolean changable;
 
     /**
      * Creates new form MainInterface
@@ -52,9 +51,9 @@ public class MainInterface extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         lstPredecessors = new javax.swing.JList();
-        jButton1 = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox();
-        jButton3 = new javax.swing.JButton();
+        btnAddPredecessor = new javax.swing.JButton();
+        cmbAvailablePredecessors = new javax.swing.JComboBox();
+        btnRemovePredecessor = new javax.swing.JButton();
         txtDuration = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
@@ -164,9 +163,19 @@ public class MainInterface extends javax.swing.JFrame {
 
         jScrollPane1.setViewportView(lstPredecessors);
 
-        jButton1.setText("Add");
+        btnAddPredecessor.setText("Add Predecessor");
+        btnAddPredecessor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddPredecessorActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Remove");
+        btnRemovePredecessor.setText("Remove Predecessor");
+        btnRemovePredecessor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemovePredecessorActionPerformed(evt);
+            }
+        });
 
         txtDuration.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -184,23 +193,20 @@ public class MainInterface extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(pnlSpecificToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSpecificToolsLayout.createSequentialGroup()
-                        .addGroup(pnlSpecificToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSpecificToolsLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSpecificToolsLayout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtDuration, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
-                                .addComponent(jLabel4)))
+                        .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtDuration, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                        .addComponent(jLabel4))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSpecificToolsLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(pnlSpecificToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnAddPredecessor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnRemovePredecessor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlSpecificToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbAvailablePredecessors, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         pnlSpecificToolsLayout.setVerticalGroup(
@@ -209,20 +215,20 @@ public class MainInterface extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(pnlSpecificToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlSpecificToolsLayout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addGap(9, 9, 9))
+                    .addGroup(pnlSpecificToolsLayout.createSequentialGroup()
                         .addGroup(pnlSpecificToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
                             .addGroup(pnlSpecificToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(jLabel5)
                                 .addComponent(txtDuration, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton3))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlSpecificToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlSpecificToolsLayout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jButton1))
+                        .addComponent(btnRemovePredecessor)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                .addGroup(pnlSpecificToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(cmbAvailablePredecessors)
+                    .addComponent(btnAddPredecessor, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -355,6 +361,8 @@ public class MainInterface extends javax.swing.JFrame {
             txtStartDate.setText("");
             txtTaskID.setText("");
             txtTaskTitle.setText("");
+            DefaultListModel<String> predecessorList = new DefaultListModel<>();
+            lstPredecessors.setModel(predecessorList);
         } else if (returnVal == -1) {
             JOptionPane.showMessageDialog(this,
                     "The file cannot be accessed, please ensure the file exists",
@@ -422,6 +430,42 @@ public class MainInterface extends javax.swing.JFrame {
         checkAndUpdate();
     }//GEN-LAST:event_txtDurationActionPerformed
 
+    private void btnAddPredecessorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddPredecessorActionPerformed
+
+        DefaultListModel<String> predecessors = new DefaultListModel<>();
+        ListModel<String> predecessorsLM = lstPredecessors.getModel();
+        for (int i = 0; i < predecessorsLM.getSize(); i++) {
+            predecessors.addElement(predecessorsLM.getElementAt(i));
+        }
+
+        if (cmbAvailablePredecessors.getModel().getSize() > 0) {
+            String taskIDtoAdd = cmbAvailablePredecessors.getSelectedItem().toString();
+            if (predecessors.indexOf(taskIDtoAdd) == -1) {
+                if (!txtTaskID.getText().equals(taskIDtoAdd)) {
+                    predecessors.addElement(cmbAvailablePredecessors.getSelectedItem().toString());
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                            "A task cannot be a predecessor to itself",
+                            "Predecessor Invalid",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+        lstPredecessors.setModel(predecessors);
+    }//GEN-LAST:event_btnAddPredecessorActionPerformed
+
+    private void btnRemovePredecessorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemovePredecessorActionPerformed
+        int predecessorIndex = lstPredecessors.getSelectedIndex();
+        DefaultListModel<String> predecessors = new DefaultListModel<>();
+        ListModel<String> predecessorsLM = lstPredecessors.getModel();
+        for (int i = 0; i < predecessorsLM.getSize(); i++) {
+            if (i != predecessorIndex) {
+                predecessors.addElement(predecessorsLM.getElementAt(i));
+            }
+        }
+        lstPredecessors.setModel(predecessors);
+    }//GEN-LAST:event_btnRemovePredecessorActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -465,10 +509,10 @@ public class MainInterface extends javax.swing.JFrame {
     private javax.swing.JMenuItem SaveProjectFileItem;
     private javax.swing.JMenu ViewMenu;
     private javax.swing.JMenuItem WBTViewItem;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnAddPredecessor;
+    private javax.swing.JButton btnRemovePredecessor;
+    private javax.swing.JComboBox cmbAvailablePredecessors;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -577,6 +621,13 @@ public class MainInterface extends javax.swing.JFrame {
         } else if (currentMode == "Gantt") {
             ganttChart();
         }
+        //refreshes possible predecessors
+        DefaultComboBoxModel predecessorList = new DefaultComboBoxModel();
+        for (TaskNode task : getBrokenDownNodes()) {
+            predecessorList.addElement(task.getTaskId());
+        }
+        cmbAvailablePredecessors.setModel(predecessorList);
+
     }
 
     /**
@@ -629,7 +680,6 @@ public class MainInterface extends javax.swing.JFrame {
             txtStartDate.setText("");
 
             //txtTaskID.setText("");
-            
             txtTaskTitle.setText("");
         } else {
             txtDuration.setText("" + task.getDuration());
@@ -637,18 +687,19 @@ public class MainInterface extends javax.swing.JFrame {
             txtStartDate.setText(task.getStartDateString());
             txtTaskID.setText(task.getTaskId());
             txtTaskTitle.setText(task.getTaskTitle());
-            DefaultListModel<String> predecessorList= new DefaultListModel<>();
-            for (String predecessorID: task.getTaskPredecessors()){
+            DefaultListModel<String> predecessorList = new DefaultListModel<>();
+            task.getTaskPredecessors().stream().forEach((predecessorID) -> {
                 predecessorList.addElement(predecessorID);
-            }
+            });
             lstPredecessors.setModel(predecessorList);
         }
     }
 
     private void checkAndUpdate() {
-        if (txtTaskTitle.getText().matches("\\d*(.\\d*)*")){
+        if (txtTaskTitle.getText().matches("\\d*(.\\d*)*")) {
             updateTaskNode();
         }
+
     }
 
     private void updateTaskNode() {
@@ -658,7 +709,7 @@ public class MainInterface extends javax.swing.JFrame {
             currentProject.remove(currentTask);
         }
         ArrayList<String> predecessors = new ArrayList<>();
-        for (int i=0;i<lstPredecessors.getModel().getSize();i++){
+        for (int i = 0; i < lstPredecessors.getModel().getSize(); i++) {
             predecessors.add(lstPredecessors.getModel().getElementAt(i).toString());
         }
         int[] newWbtCoords = {0, 0}; //set to 0,0 by default until graph type is supported
