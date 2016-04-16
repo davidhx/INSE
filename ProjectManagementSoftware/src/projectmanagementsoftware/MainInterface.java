@@ -19,6 +19,7 @@ public class MainInterface extends javax.swing.JFrame {
     private ArrayList<TaskNode> currentProject = new ArrayList<>();
     boolean JPanel3State = true;
     String currentMode = "Gantt";
+    boolean changable;
 
     /**
      * Creates new form MainInterface
@@ -50,7 +51,7 @@ public class MainInterface extends javax.swing.JFrame {
         pnlSpecificTools = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        lstPredecessors = new javax.swing.JList();
         jButton1 = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox();
         jButton3 = new javax.swing.JButton();
@@ -67,6 +68,7 @@ public class MainInterface extends javax.swing.JFrame {
         GanttViewItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Project Management Software");
 
         javax.swing.GroupLayout pnlChartAreaLayout = new javax.swing.GroupLayout(pnlChartArea);
         pnlChartArea.setLayout(pnlChartAreaLayout);
@@ -83,6 +85,12 @@ public class MainInterface extends javax.swing.JFrame {
 
         pnlGenericTools.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
+        txtTaskTitle.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtTaskTitleKeyReleased(evt);
+            }
+        });
+
         txtTaskID.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtTaskIDKeyReleased(evt);
@@ -93,7 +101,19 @@ public class MainInterface extends javax.swing.JFrame {
 
         jLabel1.setText("Task Title:");
 
+        txtStartDate.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtStartDateKeyReleased(evt);
+            }
+        });
+
         jLabel2.setText("Start Date:");
+
+        txtEndDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtEndDateActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("End Date:");
 
@@ -142,11 +162,17 @@ public class MainInterface extends javax.swing.JFrame {
 
         jLabel4.setText("Predecessors:");
 
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(lstPredecessors);
 
         jButton1.setText("Add");
 
         jButton3.setText("Remove");
+
+        txtDuration.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDurationActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Task Duration:");
 
@@ -324,6 +350,11 @@ public class MainInterface extends javax.swing.JFrame {
         int returnVal = fc.showOpenDialog(this);
         if (returnVal == 0) {
             loadProject(fc.getSelectedFile().getAbsolutePath());
+            txtDuration.setText("");
+            txtEndDate.setText("");
+            txtStartDate.setText("");
+            txtTaskID.setText("");
+            txtTaskTitle.setText("");
         } else if (returnVal == -1) {
             JOptionPane.showMessageDialog(this,
                     "The file cannot be accessed, please ensure the file exists",
@@ -374,6 +405,22 @@ public class MainInterface extends javax.swing.JFrame {
         TaskNode currentTask = getTaskByID(txtTaskID.getText());
         fillInFields(currentTask);
     }//GEN-LAST:event_txtTaskIDKeyReleased
+
+    private void txtEndDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEndDateActionPerformed
+        checkAndUpdate();
+    }//GEN-LAST:event_txtEndDateActionPerformed
+
+    private void txtTaskTitleKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTaskTitleKeyReleased
+        checkAndUpdate();
+    }//GEN-LAST:event_txtTaskTitleKeyReleased
+
+    private void txtStartDateKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtStartDateKeyReleased
+        checkAndUpdate();
+    }//GEN-LAST:event_txtStartDateKeyReleased
+
+    private void txtDurationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDurationActionPerformed
+        checkAndUpdate();
+    }//GEN-LAST:event_txtDurationActionPerformed
 
     /**
      * @param args the command line arguments
@@ -427,10 +474,10 @@ public class MainInterface extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JList jList1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblNodeID;
+    private javax.swing.JList lstPredecessors;
     private javax.swing.JPanel pnlChartArea;
     private javax.swing.JPanel pnlChartTools;
     private javax.swing.JPanel pnlGenericTools;
@@ -580,7 +627,7 @@ public class MainInterface extends javax.swing.JFrame {
             txtDuration.setText("");
             txtEndDate.setText("");
             txtStartDate.setText("");
-            
+
             //txtTaskID.setText("");
             
             txtTaskTitle.setText("");
@@ -590,6 +637,43 @@ public class MainInterface extends javax.swing.JFrame {
             txtStartDate.setText(task.getStartDateString());
             txtTaskID.setText(task.getTaskId());
             txtTaskTitle.setText(task.getTaskTitle());
+            DefaultListModel<String> predecessorList= new DefaultListModel<>();
+            for (String predecessorID: task.getTaskPredecessors()){
+                predecessorList.addElement(predecessorID);
+            }
+            lstPredecessors.setModel(predecessorList);
         }
+    }
+
+    private void checkAndUpdate() {
+        if (txtTaskTitle.getText().matches("\\d*(.\\d*)*")){
+            updateTaskNode();
+        }
+    }
+
+    private void updateTaskNode() {
+        TaskNode currentTask = getTaskByID(txtTaskID.getText().trim());
+        TaskNode newCurrentTask = null;
+        if (currentTask != null) {
+            currentProject.remove(currentTask);
+        }
+        ArrayList<String> predecessors = new ArrayList<>();
+        for (int i=0;i<lstPredecessors.getModel().getSize();i++){
+            predecessors.add(lstPredecessors.getModel().getElementAt(i).toString());
+        }
+        int[] newWbtCoords = {0, 0}; //set to 0,0 by default until graph type is supported
+        int[] newPertCoords = {0, 0}; //set to 0,0 by defult until graph type is supported
+        int newGanttPosition = 0; //currently set to 0 until sorting is supported
+        try {
+            newCurrentTask = new TaskNode(txtTaskID.getText(), txtTaskTitle.getText(),
+                    txtStartDate.getText(), Integer.parseInt(txtDuration.getText().trim()), predecessors,
+                    newWbtCoords, newPertCoords, newGanttPosition);
+
+            currentProject.add(newCurrentTask);
+        } catch (Exception e) {
+
+        }
+        refreshChart();
+
     }
 }

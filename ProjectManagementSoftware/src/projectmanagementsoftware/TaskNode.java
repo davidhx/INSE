@@ -16,7 +16,9 @@ import java.util.Date;
  * @author up726086
  */
 public class TaskNode {
-
+    //date related
+    SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
+    
     //Text Related variables
     private String taskID, taskTitle;
     private ArrayList<String> taskPredecessors;
@@ -52,7 +54,6 @@ public class TaskNode {
             taskTitle = nodeComponents[1].trim();
 
             //getting the date
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
             try {
                 startDate = sdf.parse(nodeComponents[2]);
             } catch (Exception e) {
@@ -106,12 +107,16 @@ public class TaskNode {
 
     }
 
-    public TaskNode(String newTaskID, String newTaskTitle, Date newStartDate, int newTaskDuration,
+    public TaskNode(String newTaskID, String newTaskTitle, String newStartDate, int newTaskDuration,
             ArrayList<String> newTaskPredecessors,
             int[] newWbtCoords, int[] newPertCoords, int newGanttPosition) {
         taskID = newTaskID;
         taskTitle = newTaskTitle;
-        startDate = newStartDate;
+        try {
+        startDate = sdf.parse(newStartDate);
+        } catch (Exception e){
+            startDate= null;
+        }
         taskDuration = newTaskDuration;
         taskPredecessors = newTaskPredecessors;
         wbtCoOrds = newWbtCoords;
@@ -153,12 +158,10 @@ public class TaskNode {
     }
 
     public String getStartDateString() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
         return sdf.format(startDate);
     }
 
     public String getEndDateString() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
         return sdf.format(getEndDate());
     }
 
@@ -171,7 +174,6 @@ public class TaskNode {
         outputString += taskID + ",";
         outputString += taskTitle + ",";
         //date related        
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
         outputString += sdf.format(startDate) + ",";
         outputString += taskDuration + ",";
         //covert the list of predecessors into a string
