@@ -36,7 +36,7 @@ public class MainInterface extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        panelChartArea = new javax.swing.JPanel();
+        pnlChartArea = new javax.swing.JPanel();
         pnlChartTools = new javax.swing.JPanel();
         pnlGenericTools = new javax.swing.JPanel();
         txtTaskTitle = new javax.swing.JTextField();
@@ -68,20 +68,26 @@ public class MainInterface extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        javax.swing.GroupLayout panelChartAreaLayout = new javax.swing.GroupLayout(panelChartArea);
-        panelChartArea.setLayout(panelChartAreaLayout);
-        panelChartAreaLayout.setHorizontalGroup(
-            panelChartAreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout pnlChartAreaLayout = new javax.swing.GroupLayout(pnlChartArea);
+        pnlChartArea.setLayout(pnlChartAreaLayout);
+        pnlChartAreaLayout.setHorizontalGroup(
+            pnlChartAreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 682, Short.MAX_VALUE)
         );
-        panelChartAreaLayout.setVerticalGroup(
-            panelChartAreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 162, Short.MAX_VALUE)
+        pnlChartAreaLayout.setVerticalGroup(
+            pnlChartAreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 184, Short.MAX_VALUE)
         );
 
         pnlChartTools.setBorder(javax.swing.BorderFactory.createTitledBorder("Chart Tools"));
 
         pnlGenericTools.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        txtTaskID.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtTaskIDKeyReleased(evt);
+            }
+        });
 
         lblNodeID.setText("Task ID:");
 
@@ -206,7 +212,7 @@ public class MainInterface extends javax.swing.JFrame {
         pnlChartToolsLayout.setVerticalGroup(
             pnlChartToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlChartToolsLayout.createSequentialGroup()
-                .addGap(0, 22, Short.MAX_VALUE)
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(pnlChartToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(pnlGenericTools, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pnlSpecificTools, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -276,7 +282,7 @@ public class MainInterface extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelChartArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlChartArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(pnlChartTools, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -286,7 +292,7 @@ public class MainInterface extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(panelChartArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(pnlChartArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -364,6 +370,11 @@ public class MainInterface extends javax.swing.JFrame {
         refreshChart();
     }//GEN-LAST:event_GanttViewItemActionPerformed
 
+    private void txtTaskIDKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTaskIDKeyReleased
+        TaskNode currentTask = getTaskByID(txtTaskID.getText());
+        fillInFields(currentTask);
+    }//GEN-LAST:event_txtTaskIDKeyReleased
+
     /**
      * @param args the command line arguments
      */
@@ -420,7 +431,7 @@ public class MainInterface extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblNodeID;
-    private javax.swing.JPanel panelChartArea;
+    private javax.swing.JPanel pnlChartArea;
     private javax.swing.JPanel pnlChartTools;
     private javax.swing.JPanel pnlGenericTools;
     private javax.swing.JPanel pnlSpecificTools;
@@ -493,9 +504,9 @@ public class MainInterface extends javax.swing.JFrame {
     private void ganttChart() {
 
         ChartPanel chartPanel = GanttChart.update("Project", getBrokenDownNodes());
-        panelChartArea.setLayout(new java.awt.BorderLayout());
-        panelChartArea.add(chartPanel, BorderLayout.CENTER);
-        panelChartArea.validate();
+        pnlChartArea.setLayout(new java.awt.BorderLayout());
+        pnlChartArea.add(chartPanel, BorderLayout.CENTER);
+        pnlChartArea.validate();
     }
 
     private void workBreakDownTree() {
@@ -510,8 +521,8 @@ public class MainInterface extends javax.swing.JFrame {
      * Refreshes the chart visible on screen
      */
     private void refreshChart() {
-        panelChartArea.removeAll();
-        panelChartArea.updateUI();
+        pnlChartArea.removeAll();
+        pnlChartArea.updateUI();
         if (currentMode == "WBT") {
             workBreakDownTree();
         } else if (currentMode == "PERT") {
@@ -537,9 +548,7 @@ public class MainInterface extends javax.swing.JFrame {
                 if (task2.getParentId().trim().equals(taskID)) {
                     hasChild = true;
                 }
-                System.out.println(hasChild);
-                System.out.println(taskID);
-                System.out.println(task2.getParentId());
+
             }
 
             if (!hasChild) {
@@ -549,20 +558,38 @@ public class MainInterface extends javax.swing.JFrame {
         return brokenDownNodes;
     }
 
-    
     /**
      * obtains a TaskNode with a given ID
+     *
      * @param taskID
-     * @return 
+     * @return
      */
     private TaskNode getTaskByID(String taskID) {
         if (taskID.trim() != "0") {
             for (TaskNode task : currentProject) {
-                if (taskID.trim() == task.getTaskId().trim()) {
+                if (taskID.trim().equals(task.getTaskId().trim())) {
                     return task;
                 }
             }
         }
         return null;
+    }
+
+    private void fillInFields(TaskNode task) {
+        if (task == null) {
+            txtDuration.setText("");
+            txtEndDate.setText("");
+            txtStartDate.setText("");
+            
+            //txtTaskID.setText("");
+            
+            txtTaskTitle.setText("");
+        } else {
+            txtDuration.setText("" + task.getDuration());
+            txtEndDate.setText(task.getEndDateString());
+            txtStartDate.setText(task.getStartDateString());
+            txtTaskID.setText(task.getTaskId());
+            txtTaskTitle.setText(task.getTaskTitle());
+        }
     }
 }

@@ -27,7 +27,7 @@ public class TaskNode {
     //graph positions
     private int[] wbtCoOrds, pertCoOrds;
     private int ganttPosition;
-    
+
     public TaskNode() {
         taskID = taskTitle = "";
         taskPredecessors = new ArrayList<>();
@@ -37,7 +37,7 @@ public class TaskNode {
         pertCoOrds = new int[2];
         ganttPosition = 0;
     }
-    
+
     public TaskNode(String taskString) {
         if (!taskString.matches(".*(.*,.*,.*,.*,.*\\{.*\\}.*,.*\\[.*,.*\\].*,.*\\[.*,.*\\].*,.*)")) {
             System.out.println("Unable to create a node using the string: " + taskString);
@@ -103,9 +103,9 @@ public class TaskNode {
             nodeComponents[1] = nodeComponents[1].replaceAll("\\D", "");
             ganttPosition = Integer.parseInt(nodeComponents[1]);
         }
-        
+
     }
-    
+
     public TaskNode(String newTaskID, String newTaskTitle, Date newStartDate, int newTaskDuration,
             ArrayList<String> newTaskPredecessors,
             int[] newWbtCoords, int[] newPertCoords, int newGanttPosition) {
@@ -123,7 +123,7 @@ public class TaskNode {
     public String getTaskId() {
         return taskID;
     }
-    
+
     public String getParentId() {
         int lastFullStopIndex = taskID.lastIndexOf(".");
         if (lastFullStopIndex == -1) {
@@ -131,19 +131,19 @@ public class TaskNode {
         }
         return taskID.substring(0, lastFullStopIndex);
     }
-    
+
     public String getTaskTitle() {
         return taskTitle;
     }
-    
+
     public ArrayList<String> getTaskPredecessors() {
         return taskPredecessors;
     }
-    
+
     public Date getStartDate() {
         return startDate;
     }
-    
+
     public Date getEndDate() {
         Calendar cal = Calendar.getInstance();
         cal.setTime(startDate);
@@ -151,17 +151,21 @@ public class TaskNode {
         Date endDate = cal.getTime();
         return endDate;
     }
-    
+
     public String getStartDateString() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
         return sdf.format(startDate);
     }
-    
+
     public String getEndDateString() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
         return sdf.format(getEndDate());
     }
-    
+
+    public int getDuration() {
+        return taskDuration;
+    }
+
     public String toOutputString() {
         String outputString = "(";
         outputString += taskID + ",";
@@ -190,13 +194,13 @@ public class TaskNode {
     public void setTaskId(String newTaskID) {
         taskID = newTaskID;
     }
-    
+
     public void setTaskTitle(String newTaskTitle) {
         taskTitle = newTaskTitle;
     }
-    
+
     public void setTaskPredecessors(ArrayList<String> newTaskPredecessors) {
         taskPredecessors = newTaskPredecessors;
     }
-    
+
 }
