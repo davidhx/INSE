@@ -11,20 +11,20 @@ import javax.swing.*;
 import javax.swing.JOptionPane;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-//import org.jfree.chart.ChartPanel;
+import org.jfree.chart.ChartPanel;
 
 public class MainInterface extends javax.swing.JFrame {
 
     final JFileChooser fc = new JFileChooser();
     private ArrayList<TaskNode> currentProject = new ArrayList<>();
     boolean JPanel3State = true;
+    String currentMode = "Gantt";
 
     /**
      * Creates new form MainInterface
      */
     public MainInterface() {
         initComponents();
-        ganttChart();
     }
 
     /**
@@ -36,8 +36,7 @@ public class MainInterface extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel2 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
+        panelChartArea = new javax.swing.JPanel();
         pnlChartTools = new javax.swing.JPanel();
         pnlGenericTools = new javax.swing.JPanel();
         txtTaskTitle = new javax.swing.JTextField();
@@ -57,6 +56,7 @@ public class MainInterface extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         txtDuration = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         FileMenu = new javax.swing.JMenu();
         OpenProjectFileItem = new javax.swing.JMenuItem();
@@ -68,27 +68,15 @@ public class MainInterface extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton2.setText("-");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+        javax.swing.GroupLayout panelChartAreaLayout = new javax.swing.GroupLayout(panelChartArea);
+        panelChartArea.setLayout(panelChartAreaLayout);
+        panelChartAreaLayout.setHorizontalGroup(
+            panelChartAreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 682, Short.MAX_VALUE)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 190, Short.MAX_VALUE)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+        panelChartAreaLayout.setVerticalGroup(
+            panelChartAreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 162, Short.MAX_VALUE)
         );
 
         pnlChartTools.setBorder(javax.swing.BorderFactory.createTitledBorder("Chart Tools"));
@@ -218,11 +206,18 @@ public class MainInterface extends javax.swing.JFrame {
         pnlChartToolsLayout.setVerticalGroup(
             pnlChartToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlChartToolsLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(0, 22, Short.MAX_VALUE)
                 .addGroup(pnlChartToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(pnlGenericTools, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pnlSpecificTools, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
+
+        jButton2.setText("-");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         FileMenu.setText("File");
 
@@ -258,9 +253,19 @@ public class MainInterface extends javax.swing.JFrame {
         ViewMenu.add(WBTViewItem);
 
         PERTViewMenu.setText("PERT Chart View");
+        PERTViewMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PERTViewMenuActionPerformed(evt);
+            }
+        });
         ViewMenu.add(PERTViewMenu);
 
         GanttViewItem.setText("Gantt Chart View");
+        GanttViewItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GanttViewItemActionPerformed(evt);
+            }
+        });
         ViewMenu.add(GanttViewItem);
 
         jMenuBar1.add(ViewMenu);
@@ -271,13 +276,19 @@ public class MainInterface extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelChartArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(pnlChartTools, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(panelChartArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlChartTools, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -286,7 +297,8 @@ public class MainInterface extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void WBTViewItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_WBTViewItemActionPerformed
-        // TODO add your handling code here:
+        currentMode = "WBT";
+        refreshChart();
     }//GEN-LAST:event_WBTViewItemActionPerformed
 
 
@@ -342,6 +354,16 @@ public class MainInterface extends javax.swing.JFrame {
 
     }//GEN-LAST:event_SaveProjectFileItemActionPerformed
 
+    private void PERTViewMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PERTViewMenuActionPerformed
+        currentMode = "PERT";
+        refreshChart();
+    }//GEN-LAST:event_PERTViewMenuActionPerformed
+
+    private void GanttViewItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GanttViewItemActionPerformed
+        currentMode = "Gantt";
+        refreshChart();
+    }//GEN-LAST:event_GanttViewItemActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -396,9 +418,9 @@ public class MainInterface extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JList jList1;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblNodeID;
+    private javax.swing.JPanel panelChartArea;
     private javax.swing.JPanel pnlChartTools;
     private javax.swing.JPanel pnlGenericTools;
     private javax.swing.JPanel pnlSpecificTools;
@@ -414,6 +436,7 @@ public class MainInterface extends javax.swing.JFrame {
         String projectString = loadFile(fileName);
         if (!projectString.equals("")) {
             currentProject = createNodes(projectString);
+            refreshChart();
         }
     }
 
@@ -438,7 +461,7 @@ public class MainInterface extends javax.swing.JFrame {
             outputString += currentProject.get(i).toOutputString() + "\n";
         }
         if (!"".equals(outputString)) {
-            outputString = outputString.substring(0,outputString.length()-1);
+            outputString = outputString.substring(0, outputString.length() - 1);
             byte[] outputBytes = outputString.getBytes(StandardCharsets.UTF_8);
             Path file = Paths.get(outputPath);
             try {
@@ -469,10 +492,30 @@ public class MainInterface extends javax.swing.JFrame {
 
     private void ganttChart() {
 
-        ChartPanel chartPanel = GanttChart.Test("Gantt Chart Test 1");
-        jPanel2.setLayout(new java.awt.BorderLayout());
-        jPanel2.add(chartPanel, BorderLayout.CENTER);
-        jPanel2.validate();
+        ChartPanel chartPanel = GanttChart.update("Project", currentProject);
+        panelChartArea.setLayout(new java.awt.BorderLayout());
+        panelChartArea.add(chartPanel, BorderLayout.CENTER);
+        panelChartArea.validate();
+    }
+
+    private void workBreakDownTree() {
+        //to be written
+    }
+
+    private void pertChart() {
+        //to be written
+    }
+
+    private void refreshChart() {
+        panelChartArea.removeAll(); 
+        panelChartArea.updateUI();
+        if (currentMode == "WBT") {
+            workBreakDownTree();
+        } else if (currentMode == "PERT") {
+            pertChart();
+        } else if (currentMode == "Gantt") {
+            ganttChart();
+        }
     }
 
 }

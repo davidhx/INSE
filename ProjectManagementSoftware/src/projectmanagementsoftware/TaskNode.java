@@ -140,16 +140,26 @@ public class TaskNode {
         return taskPredecessors;
     }
     
-    public String getStartDate() {
-        return startDate.toString();
+    public Date getStartDate() {
+        return startDate;
     }
     
-    public String getEndDate() {
+    public Date getEndDate() {
         Calendar cal = Calendar.getInstance();
         cal.setTime(startDate);
         cal.add(Calendar.DATE, taskDuration);
         Date endDate = cal.getTime();
-        return endDate.toString();
+        return endDate;
+    }
+    
+    public String getStartDateString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
+        return sdf.format(startDate);
+    }
+    
+    public String getEndDateString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
+        return sdf.format(getEndDate());
     }
     
     public String toOutputString() {
