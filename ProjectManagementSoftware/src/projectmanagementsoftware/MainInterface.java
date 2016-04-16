@@ -492,7 +492,7 @@ public class MainInterface extends javax.swing.JFrame {
 
     private void ganttChart() {
 
-        ChartPanel chartPanel = GanttChart.update("Project", currentProject);
+        ChartPanel chartPanel = GanttChart.update("Project", getBrokenDownNodes());
         panelChartArea.setLayout(new java.awt.BorderLayout());
         panelChartArea.add(chartPanel, BorderLayout.CENTER);
         panelChartArea.validate();
@@ -506,8 +506,11 @@ public class MainInterface extends javax.swing.JFrame {
         //to be written
     }
 
+    /**
+     * Refreshes the chart visible on screen
+     */
     private void refreshChart() {
-        panelChartArea.removeAll(); 
+        panelChartArea.removeAll();
         panelChartArea.updateUI();
         if (currentMode == "WBT") {
             workBreakDownTree();
@@ -518,4 +521,48 @@ public class MainInterface extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Obtains only the most broken down level of tasks from the WBT data
+     * (Checks each node for subtasks)
+     *
+     * @return
+     */
+    private ArrayList<TaskNode> getBrokenDownNodes() {
+        ArrayList<TaskNode> brokenDownNodes = new ArrayList<>();
+        for (TaskNode task : currentProject) {
+
+            String taskID = task.getTaskId().trim();
+            boolean hasChild = false;
+            for (TaskNode task2 : currentProject) {
+                if (task2.getParentId().trim().equals(taskID)) {
+                    hasChild = true;
+                }
+                System.out.println(hasChild);
+                System.out.println(taskID);
+                System.out.println(task2.getParentId());
+            }
+
+            if (!hasChild) {
+                brokenDownNodes.add(task);
+            }
+        }
+        return brokenDownNodes;
+    }
+
+    
+    /**
+     * obtains a TaskNode with a given ID
+     * @param taskID
+     * @return 
+     */
+    private TaskNode getTaskByID(String taskID) {
+        if (taskID.trim() != "0") {
+            for (TaskNode task : currentProject) {
+                if (taskID.trim() == task.getTaskId().trim()) {
+                    return task;
+                }
+            }
+        }
+        return null;
+    }
 }
