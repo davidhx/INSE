@@ -42,7 +42,7 @@ public class GanttChart {
      */
     public static IntervalCategoryDataset createDataset(ArrayList<TaskNode> currentProject) {
         final TaskSeries s1 = new TaskSeries("Scheduled");
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         currentProject.stream().forEach((task) -> {
             s1.add(new Task(task.getTaskTitle(), task.getStartDate(), task.getEndDate()));
         });

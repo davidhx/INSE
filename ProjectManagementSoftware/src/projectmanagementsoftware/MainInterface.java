@@ -663,7 +663,7 @@ public class MainInterface extends javax.swing.JFrame {
      * @return
      */
     private TaskNode getTaskByID(String taskID) {
-        if (taskID.trim() != "0") {
+        if (!"0".equals(taskID.trim())) {
             for (TaskNode task : currentProject) {
                 if (taskID.trim().equals(task.getTaskId().trim())) {
                     return task;

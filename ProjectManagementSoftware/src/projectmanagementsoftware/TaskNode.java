@@ -16,9 +16,10 @@ import java.util.Date;
  * @author up726086
  */
 public class TaskNode {
+
     //date related
-    SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
-    
+    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+
     //Text Related variables
     private String taskID, taskTitle;
     private ArrayList<String> taskPredecessors;
@@ -113,9 +114,9 @@ public class TaskNode {
         taskID = newTaskID;
         taskTitle = newTaskTitle;
         try {
-        startDate = sdf.parse(newStartDate);
-        } catch (Exception e){
-            startDate= null;
+            startDate = sdf.parse(newStartDate);
+        } catch (Exception e) {
+            startDate = null;
         }
         taskDuration = newTaskDuration;
         taskPredecessors = newTaskPredecessors;
