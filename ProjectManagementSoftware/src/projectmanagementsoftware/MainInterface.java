@@ -12,6 +12,9 @@ import javax.swing.JOptionPane;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import org.jfree.chart.ChartPanel;
+import java.util.Calendar;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MainInterface extends javax.swing.JFrame {
 
@@ -19,6 +22,8 @@ public class MainInterface extends javax.swing.JFrame {
     private ArrayList<TaskNode> currentProject = new ArrayList<>();
     boolean JPanel3State = true;
     String currentMode = "Gantt";
+    //date auto-correcting
+    int lastDateFieldTypedIn = -1;
 
     /**
      * Creates new form MainInterface
@@ -108,9 +113,9 @@ public class MainInterface extends javax.swing.JFrame {
 
         jLabel2.setText("Start Date:");
 
-        txtEndDate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtEndDateActionPerformed(evt);
+        txtEndDate.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtEndDateKeyReleased(evt);
             }
         });
 
@@ -177,9 +182,9 @@ public class MainInterface extends javax.swing.JFrame {
             }
         });
 
-        txtDuration.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDurationActionPerformed(evt);
+        txtDuration.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtDurationKeyReleased(evt);
             }
         });
 
@@ -414,21 +419,21 @@ public class MainInterface extends javax.swing.JFrame {
         fillInFields(currentTask);
     }//GEN-LAST:event_txtTaskIDKeyReleased
 
-    private void txtEndDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEndDateActionPerformed
-        checkAndUpdate();
-    }//GEN-LAST:event_txtEndDateActionPerformed
-
     private void txtTaskTitleKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTaskTitleKeyReleased
+        if (txtTaskTitle.getText().contains(",")) {
+            txtTaskTitle.setText(txtTaskTitle.getText().replaceAll(",", ""));
+            JOptionPane.showMessageDialog(this,
+                    "Task titles are not allowed to contain commas",
+                    "Comma issue", JOptionPane.INFORMATION_MESSAGE);
+        }
+
         checkAndUpdate();
     }//GEN-LAST:event_txtTaskTitleKeyReleased
 
     private void txtStartDateKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtStartDateKeyReleased
+        lastDateFieldTypedIn = 0;
         checkAndUpdate();
     }//GEN-LAST:event_txtStartDateKeyReleased
-
-    private void txtDurationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDurationActionPerformed
-        checkAndUpdate();
-    }//GEN-LAST:event_txtDurationActionPerformed
 
     private void btnAddPredecessorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddPredecessorActionPerformed
 
@@ -465,6 +470,16 @@ public class MainInterface extends javax.swing.JFrame {
         }
         lstPredecessors.setModel(predecessors);
     }//GEN-LAST:event_btnRemovePredecessorActionPerformed
+
+    private void txtDurationKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDurationKeyReleased
+        lastDateFieldTypedIn = 2;
+        checkAndUpdate();
+    }//GEN-LAST:event_txtDurationKeyReleased
+
+    private void txtEndDateKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEndDateKeyReleased
+        lastDateFieldTypedIn = 1;
+        checkAndUpdate();
+    }//GEN-LAST:event_txtEndDateKeyReleased
 
     /**
      * @param args the command line arguments
@@ -673,13 +688,54 @@ public class MainInterface extends javax.swing.JFrame {
         return null;
     }
 
+    private void fillInDates() {
+        Date startDate, endDate;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyy");
+        int duration = -1;
+        try {
+            startDate = sdf.parse(txtStartDate.getText());
+        } catch (Exception e) {
+            startDate = null;
+        }
+
+        try {
+            endDate = sdf.parse(txtEndDate.getText());
+        } catch (Exception e) {
+            endDate = null;
+        }
+
+        try {
+            duration = Integer.parseInt(txtDuration.getText().trim());
+        } catch (Exception e) {
+            duration = -1;
+        }
+
+        if (endDate != null && startDate != null && lastDateFieldTypedIn != 2) {
+            long end = endDate.getTime();
+            long start = startDate.getTime();
+            duration = (int)( (end - start) / (1000 * 60 * 60 * 24));
+            txtDuration.setText("" + duration);
+        } else if (startDate != null && duration >= 0 && lastDateFieldTypedIn != 1) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(startDate);
+            cal.add(Calendar.DATE, duration);
+            endDate = cal.getTime();
+            txtEndDate.setText(sdf.format(endDate));
+        } else if (endDate != null && duration >= 0 && lastDateFieldTypedIn != 0) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(endDate);
+            cal.add(Calendar.DATE, -duration);
+            startDate = cal.getTime();
+            txtStartDate.setText(sdf.format(startDate));
+
+        }
+    }
+
     private void fillInFields(TaskNode task) {
         if (task == null) {
             txtDuration.setText("");
             txtEndDate.setText("");
             txtStartDate.setText("");
-
-            //txtTaskID.setText("");
             txtTaskTitle.setText("");
         } else {
             txtDuration.setText("" + task.getDuration());
@@ -696,10 +752,19 @@ public class MainInterface extends javax.swing.JFrame {
     }
 
     private void checkAndUpdate() {
-        if (txtTaskTitle.getText().matches("\\d*(.\\d*)*")) {
-            updateTaskNode();
+        fillInDates();
+        Date startDate;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyy");
+        try {
+            startDate = sdf.parse(txtStartDate.getText());
+        } catch (Exception e) {
+            startDate = null;
         }
 
+        if (startDate != null && txtTaskTitle.getText().matches("\\d*(.\\d*)*")) {
+            updateTaskNode();
+        }
+        
     }
 
     private void updateTaskNode() {

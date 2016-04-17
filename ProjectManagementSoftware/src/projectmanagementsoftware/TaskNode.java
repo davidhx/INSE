@@ -118,7 +118,11 @@ public class TaskNode {
         } catch (Exception e) {
             startDate = null;
         }
-        taskDuration = newTaskDuration;
+        if (newTaskDuration >= 0) {
+            taskDuration = newTaskDuration;
+        } else {
+            taskDuration = 0;
+        }
         taskPredecessors = newTaskPredecessors;
         wbtCoOrds = newWbtCoords;
         pertCoOrds = newPertCoords;
